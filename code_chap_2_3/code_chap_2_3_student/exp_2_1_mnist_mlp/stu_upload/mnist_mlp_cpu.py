@@ -6,6 +6,7 @@ import time
 
 from layers_1 import FullyConnectedLayer, ReLULayer, SoftmaxLossLayer
 
+# 数据目录，训练数据、测试数据
 MNIST_DIR = "../mnist_data"
 TRAIN_DATA = "train-images-idx3-ubyte"
 TRAIN_LABEL = "train-labels-idx1-ubyte"
@@ -23,10 +24,11 @@ class MNIST_MLP(object):
         self.hidden1 = hidden1          # 隐层节点数？
         self.hidden2 = hidden2
         self.out_classes = out_classes
-        self.lr = lr
+        self.lr = lr                    # 学习率 learn rate
         self.max_epoch = max_epoch
         self.print_iter = print_iter
 
+    # 读取image和label，参数3指示类型
     def load_mnist(self, file_dir, is_images = 'True'):
         # Read binary data
         bin_file = open(file_dir, 'rb')
@@ -35,11 +37,11 @@ class MNIST_MLP(object):
         # Analysis file header
         if is_images:
             # Read images
-            fmt_header = '>iiii'
+            fmt_header = '>iiii'        # 大端模式，4个int
             magic, num_images, num_rows, num_cols = struct.unpack_from(fmt_header, bin_data, 0)
         else:
             # Read labels
-            fmt_header = '>ii'
+            fmt_header = '>ii'          # 大端模式，2个int
             magic, num_images = struct.unpack_from(fmt_header, bin_data, 0)
             num_rows, num_cols = 1, 1
         data_size = num_images * num_rows * num_cols
@@ -52,9 +54,9 @@ class MNIST_MLP(object):
         # TODO: 调用函数 load_mnist 读取和预处理 MNIST 中训练数据和测试数据的图像和标记
         print('Loading MNIST data from files...')
         train_images = self.load_mnist(os.path.join(MNIST_DIR, TRAIN_DATA), True)
-        train_labels = ________________
-        test_images = ________________
-        test_labels = ________________
+        train_labels = self.load_mnist(os.path.join(MNIST_DIR, TRAIN_LABEL), False)
+        test_images = self.load_mnist(os.path.join(MNIST_DIR, TEST_DATA), True)
+        test_labels = self.load_mnist(os.path.join(MNIST_DIR, TEST_LABEL), False)
         self.train_data = np.append(train_images, train_labels, axis=1)
         self.test_data = np.append(test_images, test_labels, axis=1)
         # self.test_data = np.concatenate((self.train_data, self.test_data), axis=0)
